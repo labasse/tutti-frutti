@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Tutti-Frutti - Portrait</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+      li.fruit {
+        z-index: 10
+      }
+      .fruit {
+        background-image: url('img/palette.gif');
+        cursor: grab;
+      }
+      .fruit:hover {
+        background-color: rgba(192, 192, 192, 0.5);
+        border-radius: 10px;
+      }
+      .cur {
+        border: 1px dashed #555;
+        box-sizing: border-box;
+      }
+      .fruit:active {
+        cursor: grabbing;
+        background-color: transparent;
+      }
+      #palette li {
+        width: 45px;
+        height: 45px;
+        background-size: 315px;
+      }
+      #canevas {
+        border: 2px solid #888;
+        height: 500px;
+        position: relative;
+        overflow: hidden
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">Tutti-Frutti</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="index.html#chercher">Chercher</a></li>
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="index.html#liste">Découvrir</a></li>
+              <li class="nav-item"><a class="nav-link" href="index.html#cuisiner">Cuisiner</a></li>
+              <li class="nav-item"><a class="nav-link" href='calendrier.html'>Calendrier</a></li>
+              <li class="nav-item"><a class="nav-link active" href='portrait.html'>Portrait</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+</header>
+<main>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-3 col-lg-4">
+          <select id="partie" onchange="majpalette()">
+            <option value="-1" selected>Tout</option>
+            <option value="0">Œil</option>
+            <option value="1">Nez</option>
+            <option value="2">Bouche</option>
+          </select>
+          <ul class="list-inline" id="palette"></ul>
+        </div>
+        <div class="col-8 col-md-6 col-lg-4" id='canevas'>
+        </div>
+        <div class="col-4 col-md-3 col-lg-4">
+          <div class="mb-3">
+            <label for="titre" class="form-label">Titre</label>
+            <input type="text" name="titre" id="titre" value="">
+          </div>
+          <div class="mb-3">
+            <label for="taille" class="form-label">Taille : <span id="valeur">5</span></label>
+            <input type="range" class="form-range" min="0" max="9" step="1" id="taille" value="5">
+          </div>
+          <div class="mb-3">
+            <label for="fond" class="form-label">Fond</label>
+            <input class="form-control" type="file" id="fond">
+          </div>
+        </div>
+    </div>
+  </div>
+</main>
+<footer class="text-body-secondary py-2">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Haut de page</a>
+    </p>
+    <p class="mb-1">Inspiré par <a href='https://fr.wikipedia.org/wiki/Giuseppe_Arcimboldo'>Giuseppe Arcimboldo</a></p>
+    <p class="mb-1">Site d'exemple utilisé pour la formation LinkedIn Learning - L'essentiel de Selenium.</p>
+  </div>
+</footer>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+      const spriteSheet = 2520, spriteSize = 360
+      const palette = document.getElementById("palette")
+      const canevas = document.getElementById("canevas")
+      const taille  = document.getElementById("taille")
+      const valeur  = document.getElementById("valeur")
+      const fond    = document.getElementById("fond")
+      const partie  = document.getElementById("partie") 
+      const parties = [
+        [[6,1], [4,3], [5,3]],
+        [[4,0], [5,0], [3,1], [5,2], [2,2], [3,3]],
+        [[6,0], [6,1], [6,2], [6,3]]
+      ]
+      var fruits = {}
+      var id = 1
+      var selection = null
+      var fondzoom = 1, fondtaille = 0, fondx = 0, fondy = 0
+      var depl0 = null
+
+      canevas.onmousedown = e => depl0 = e
+      canevas.onmousemove = e => majposfond(e, e)
+      canevas.onmouseup   = 
+      canevas.onmouseleave= e => majposfond(e, null)
+      canevas.onwheel     = e => {
+        fondzoom = Math.max(.5, Math.min(2, fondzoom+e.deltaY/1000))
+        majfondcanevas()
+        return false
+      }
+      for(let param of document.cookie.split(';')) {
+        const [n, v] = param.split("=").map(e => e.trim())
+
+        if(n=="taille") {
+          taille.value = valeur.innerText = parseInt(v)
+        }
+      }
+
+      fond.onchange = e => {
+        if(e.target.files.length) {
+          var reader = new FileReader();
+          reader.onloadend = () => {
+            let image = new Image();
+
+            image.onload = () => {
+              fondtaille = image.width
+              canevas.style.backgroundImage=`url(${reader.result})`
+              fondx = fondy = 0
+              majfondcanevas()
+            }
+            image.src = reader.result;
+          }
+          reader.readAsDataURL(e.target.files[0])
+        }
+      }
+      taille.oninput = e => {
+        valeur.innerText = e.target.value
+        if(selection) {
+          resize(selection, fruits[selection.id], e.target.value)
+        }
+      }
+      function majpalette() {  
+        let html = ''
+        let palette_element = (x, y) => `<li class='list-inline-item fruit' id='${x}-${y}' style='background-position: ${x*45}px ${y*45}px;'>`
+        
+        if(partie.value>=0) {
+          for(let coord of parties[partie.value]) {
+            html+=palette_element(7-coord[0], 4-coord[1])
+          }
+        }
+        else {
+          for(let y=0; y<4; y++) {
+            for(let x=0; x<7; x++) {
+              html+=palette_element(x, y)
+            }
+          }
+        }
+        palette.innerHTML = html
+        $(".fruit").draggable({
+          helper: "clone",
+          stack: ".draggable",
+          revert: "invalid",
+          drag: e => {
+            e.stopPropagation()
+          }
+        });
+      }
+      function majposfond(e, nouv) {
+        if(depl0) {
+          e.preventDefault()
+          fondx += e.pageX - depl0.pageX
+          fondy += e.pageY - depl0.pageY
+          depl0 = nouv
+          majfondcanevas()
+        }
+      }
+      function majfondcanevas() {
+        canevas.style.backgroundSize = `${Math.round(fondtaille * fondzoom)}px`
+        canevas.style.backgroundPosition = `${fondx}px ${fondy}px`
+      }
+      function resize(div, fruit, taille) {
+        diviseur = 10 - taille
+        tailleSprite = Math.round(spriteSize/diviseur)
+        fruit.taille = taille
+        div.style.backgroundSize = `${Math.round(spriteSheet/diviseur)}px`
+        div.style.backgroundPosition = `${fruit.sprite[0]*tailleSprite}px ${fruit.sprite[1]*tailleSprite}px` 
+        div.style.width = div.style.height = `${tailleSprite}px`
+        return div      
+      }
+
+      function select(id) {
+        if(selection && (!id || selection.id!=id)) {
+          selection.className="fruit"
+          selection = null
+        }
+        if(id) {
+          let fruit = fruits[id]
+
+          if(fruit) {
+            selection = document.getElementById(id)
+            selection.className = "fruit cur"
+          }
+        }
+      }
+
+      function click(e) {
+        select(selection && e.target.id == selection.id ? null : e.target.id)
+      }
+
+      function reset() {
+        fruits={}
+        canevas.innerHTML = ""
+      }
+
+      $(()=>{
+        $("#canevas").droppable({
+          drop: function (e, ui) {
+              let droppable = $(this);
+              let draggable = ui.draggable;
+              let draggableid = draggable.attr('id')
+              let fruit = fruits[draggableid]
+              let div
+              const cpos = $(canevas).offset()
+
+              if(fruit) {
+                div = document.getElementById(draggableid)
+              }
+              else {
+                fruit = { icone: draggableid, sprite: draggableid.split('-') }
+                div = resize(document.createElement("div"), fruit, 2)
+                div.id = `f${id++}`
+                div.className = "fruit"
+                div.style.position = "absolute"
+                fruits[div.id] = fruit
+                canevas.appendChild(div) 
+                $(div).draggable({
+                  containment: "parent",
+                  drag: e => depl0 = null
+                }).click(click)
+                fruit.x = ui.offset.left - cpos.left
+                fruit.y = ui.offset.top - cpos.top                
+                div.style.left = `${fruit.x}px`
+                div.style.top  = `${fruit.y}px`
+              }
+              select(div.id)
+          }
+        });
+        majpalette()
+      });
+    </script>    
+</body>
+</html>

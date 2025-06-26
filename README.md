@@ -1,2 +1,3 @@
-# tutti-frutti
-Sample site for functional testing training
+# Tutti-Frutti
+
+Sample site for functional testing training.

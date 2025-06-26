@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Tutti-Frutti</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      .banner {
+        background-image: url('img/banner.jpg');
+        background-size: cover;
+        background-position: center center;
+      }
+      .banner div {
+        text-shadow: #fff 1px 0 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">Tutti-Frutti</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="index.html#chercher">Chercher</a></li>
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="index.html#liste">Découvrir</a></li>
+              <li class="nav-item"><a class="nav-link" href="index.html#cuisiner">Cuisiner</a></li>
+              <li class="nav-item"><a class="nav-link active" href="calendrier.html">Calendrier</a></li>
+              <li class="nav-item"><a class="nav-link" href='portrait.html'>Portrait</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+</header>
+<main data-bs-spy="scroll" data-bs-target="#navbar">
+
+  <div class="py-5 mt-5">
+    <div class="container">
+      <ul class="nav nav-pills">
+        <li class="nav-item" v-for="(nom, index) in mois" :key="index" v-on:click="() => this.moisCourant = index">
+          <a :class="{'nav-link': true, 'active' : moisCourant===index}" aria-current="page" href="#">{{mois[index]}}</a>
+        </li>
+      </ul>
+      
+      <div class="row mt-3">
+          <ul class="list-group">
+            <li class="list-group-item" v-for="fruit in deSaison">{{fruit[0]}}</li>
+          </ul>
+      </div>
+    <div>
+  </div>
+
+</main>
+<footer class="text-body-secondary py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Haut de page</a>
+    </p>
+    <p class="mb-1">Site d'exemple utilisé pour la formation LinkedIn Learning - L'essentiel de Selenium.</p>
+    <p class="mb-1">Photos et images : <a href='https://pixabay.com/'>pixabay</a>.</p>
+  </div>
+</footer>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue
+        const mois = ["Janvier",	"Février",	"Mars",	"Avril",	"Mai",	"Juin",	"Juillet",	"Août",	"Septembre",	"Octobre",	"Novembre",	"Décembre" ]
+        createApp({
+            setup() {
+                const calendrier = ref([])       
+                const moisCourant = ref((new Date()).getMonth())
+                const deSaison = computed(()=>calendrier.value.filter(f => f[1]&(1<<moisCourant.value)))
+                
+                onMounted(async () => {
+                  const reponse = await fetch('calendrier.json')
+                  
+                  calendrier.value = reponse.ok ? await reponse.json() : []
+                })
+                return { mois, moisCourant, deSaison }
+            },
+            }).mount('#app')
+    </script>    
+</body>
+</html>

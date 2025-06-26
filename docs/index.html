@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Tutti-Frutti</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      .banner {
+        background-image: url('img/banner.jpg');
+        background-size: cover;
+        background-position: center center;
+      }
+      .banner div {
+        text-shadow: #fff 1px 0 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">Tutti-Frutti</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><a class="nav-link active" aria-current="page" href="#chercher">Chercher</a></li>
+              <li class="nav-item"><a class="nav-link" aria-current="page" href="#liste">Découvrir</a></li>
+              <li class="nav-item"><a class="nav-link" href="#cuisiner">Cuisiner</a></li>
+              <li class="nav-item"><a class="nav-link" href="calendrier.html">Calendrier</a></li>
+              <li class="nav-item"><a class="nav-link" href='portrait.html'>Portrait</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+</header>
+<main data-bs-spy="scroll" data-bs-target="#navbar">
+  <section class="mt-5 py-5 text-center container banner" id="chercher">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-bold">Des fruits hauts en saveur !</h1>
+          <input class="form-control me-2 form-control-lg" type="search" placeholder="Exotique, été..." aria-label="Chercher" v-model="filtre" autofocus>
+      </div>
+    </div>
+  </section>
+
+  <div class="py-5" id="liste">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="filtre">
+
+        <div class="col" v-for="fruit in salade">
+          <div class="card shadow-sm">
+            <img v-bind:src="`img/${fruit.image}.jpg`" class="card-img-top" alt="{{fruit.titre}}"></img>
+            <div class="card-body">
+              <h5 class="card-title">{{fruit.titre}}</h5>
+              <p class="card-text">{{fruit.description}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    <div>
+</div>
+<div class="py-5" id="cuisiner">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1>Cuisiner</h1>
+          <p>Nos meilleures recettes :</p>
+          <ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Curabitur mollis velit sagittis elit malesuada suscipit.</li>
+            <li>In cursus tortor vel erat malesuada, eget tincidunt felis sagittis.</li>
+            <li>Ut iaculis justo eget euismod posuere.</li>
+            <li>Ut consequat neque eget orci malesuada, eget ornare urna vulputate.</li>
+            <li>Nam molestie eros nec iaculis consectetur.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="text-body-secondary py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Haut de page</a>
+    </p>
+    <p class="mb-1">Site d'exemple utilisé pour la formation LinkedIn Learning - L'essentiel de Selenium.</p>
+    <p class="mb-1">Photos et images : <a href='https://pixabay.com/'>pixabay</a>.</p>
+  </div>
+</footer>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        const { createApp, ref, computed } = Vue
+
+        createApp({
+            setup() {
+                const tout = [
+                    {  titre: "Abricot" , image: "abricot", description: "Donec lacinia viverra leo, eu mattis erat posuere sit amet." },
+                    {  titre: "Ananas"  , image: "ananas" , description: "Nullam cursus sapien lacus, ut volutpat nunc semper non." },
+                    {  titre: "Banane"  , image: "banane" , description: "Aenean non nunc porta, venenatis lacus non, auctor elit." },
+                    {  titre: "Cerise"  , image: "cerise" , description: "Nulla a leo vitae nunc maximus euismod ac nec dolor. Morbi augue neque." },
+                    {  titre: "Fraise"  , image: "fraise" , description: "Morbi porta euismod odio, at convallis purus mollis eget." },
+                    {  titre: "Kiwi"    , image: "kiwi"   , description: "Aenean cursus ornare risus a condimentum. Nulla facilisi." },
+                    {  titre: "Orange"  , image: "orange" , description: "Pellentesque habitant morbi tristique senectus et netus." },
+                    {  titre: "Pêche"   , image: "peche"  , description: "Mauris tempus maximus ante, condimentum finibus arcu." },
+                    {  titre: "Poire"   , image: "poire"  , description: "Aliquam tincidunt malesuada dolor, id sagittis quam lobortis eget." },
+                    {  titre: "Pomme"   , image: "pomme"  , description: "Aenean venenatis diam quis leo eleifend, eget pretium nunc tincidunt" },
+                    {  titre: "Raisin"  , image: "raisin" , description: "Morbi fringilla magna quis turpis malesuada egestas a ut est." }
+
+                ]
+                const filtre = ref('')
+                const salade = computed(()=>{
+                    let mot = filtre.value.trim().toLowerCase()
+                    let res = mot.length > 0 
+                        ? tout.filter(f => 
+                            f.titre.toLowerCase().search(mot)>=0 || 
+                            f.description.toLowerCase().search(mot)>=0)
+                        : tout
+                    if(res.length === 1) {
+                      setTimeout(() => filtre.value = res[0].titre, 5000)
+                    } 
+                    return res
+                })
+                return {
+                    filtre,
+                    salade
+                }
+            }
+        }).mount('#app')
+    </script>    
+</body>
+</html>
