@@ -226,6 +226,7 @@
       function select(id) {
         if(selection && (!id || selection.id!=id)) {
           selection.className="fruit"
+          selection.ariaSelected = false
           selection = null
         }
         if(id) {
@@ -234,6 +235,7 @@
           if(fruit) {
             selection = document.getElementById(id)
             selection.className = "fruit cur"
+            selection.ariaSelected = true
           }
         }
       }
