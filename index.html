@@ -30,7 +30,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item"><a class="nav-link active" aria-current="page" href="#chercher">Chercher</a></li>
-              <li class="nav-item"><a class="nav-link" aria-current="page" href="#liste">Découvrir</a></li>
+              <li class="nav-item"><a class="nav-link" href="#liste">Découvrir</a></li>
               <li class="nav-item"><a class="nav-link" href="#cuisiner">Cuisiner</a></li>
               <li class="nav-item"><a class="nav-link" href="calendrier.html">Calendrier</a></li>
               <li class="nav-item"><a class="nav-link" href='portrait.html'>Portrait</a></li>
@@ -50,12 +50,12 @@
   </section>
 
   <div class="py-5" id="liste">
-    <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="filtre">
+    <div class="container" role="list">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
         <div class="col" v-for="fruit in salade">
-          <div class="card shadow-sm">
-            <img v-bind:src="`img/${fruit.image}.jpg`" class="card-img-top" alt="{{fruit.titre}}"></img>
+          <div class="card shadow-sm" role="listitem">
+            <img :src="`img/${fruit.image}.jpg`" class="card-img-top" :alt="`${fruit.titre} (fruit)`">
             <div class="card-body">
               <h5 class="card-title">{{fruit.titre}}</h5>
               <p class="card-text">{{fruit.description}}</p>
@@ -90,7 +90,7 @@
     <p class="float-end mb-1">
       <a href="#">Haut de page</a>
     </p>
-    <p class="mb-1">Site d'exemple utilisé pour la formation LinkedIn Learning - L'essentiel de Selenium.</p>
+    <p class="mb-1">Site d'exemple utilisé pour la formation LinkedIn Learning - L'essentiel de Playwright.</p>
     <p class="mb-1">Photos et images : <a href='https://pixabay.com/'>pixabay</a>.</p>
   </div>
 </footer>
