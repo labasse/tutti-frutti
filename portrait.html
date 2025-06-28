@@ -80,7 +80,7 @@
         <figure class="col-8 col-md-6 col-lg-4 text-center">
           <div id='canevas'>
           </div>
-          <figcaption id="caption" class="figure-caption"></figcaption>
+          <figcaption class="figure-caption"></figcaption>
         </figure>
         <div class="col-4 col-md-3 col-lg-4">
           <div class="mb-3">
@@ -90,6 +90,7 @@
                 <input type="submit" class="btn btn-outline-secondary" value="Ok">
               </div>
             </form>
+            <label><input type='checkbox' checked onchange="$('figcaption').toggle()"> Titre visible</label>
           </div>
           <div class="mb-3">
             <label for="taille" class="form-label">Taille : <var id="valeur">5</var></label>
@@ -247,7 +248,7 @@
       }
 
       $(()=>{
-        $("#caption").html(document.createTextNode(
+        $("figcaption").html(document.createTextNode(
           new URLSearchParams(window.location.search).get("titre") || "(sans titre)"
         ));
         $("#canevas").droppable({
@@ -266,6 +267,7 @@
                 fruit = { icone: draggableid, sprite: draggableid.split('-') }
                 div = resize(document.createElement("div"), fruit, 2)
                 div.id = `f${id++}`
+                div.role = 'listitem'
                 div.className = "fruit"
                 div.style.position = "absolute"
                 fruits[div.id] = fruit
