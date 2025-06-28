@@ -78,7 +78,7 @@
           <ul class="list-inline" id="palette"></ul>
         </div>
         <figure class="col-8 col-md-6 col-lg-4 text-center">
-          <div id='canevas' role="list">
+          <div id='canevas' role="grid">
           </div>
           <figcaption class="figure-caption" role="heading"></figcaption>
         </figure>
@@ -269,7 +269,7 @@
                 fruit = { icone: draggableid, sprite: draggableid.split('-') }
                 div = resize(document.createElement("div"), fruit, 2)
                 div.id = `f${id++}`
-                div.role = 'listitem'
+                div.role = 'gridcell'
                 div.className = "fruit"
                 div.style.position = "absolute"
                 fruits[div.id] = fruit
