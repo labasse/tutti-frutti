@@ -134,6 +134,18 @@
       var fondzoom = 1, fondtaille = 0, fondx = 0, fondy = 0
       var depl0 = null
 
+      document.onkeydown = e => {
+        if(e.key=="Delete" && selection) {
+          if(!e.ctrlKey) {
+            delete fruits[selection.id]
+            canevas.removeChild(selection)
+            select(canevas.lastChild ? canevas.lastChild.id : null)
+          }
+          else if(confirm("Voulez-vous vraiment tout supprimer ?")) {
+            reset()
+          }
+        }
+      }
       canevas.onmousedown = e => depl0 = e
       canevas.onmousemove = e => majposfond(e, e)
       canevas.onmouseup   = 
@@ -247,6 +259,7 @@
       function reset() {
         fruits={}
         canevas.innerHTML = ""
+        select(null)
       }
 
       $(()=>{
